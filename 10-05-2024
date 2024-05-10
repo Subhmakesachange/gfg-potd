@@ -1,0 +1,37 @@
+
+
+class Solution {
+public:
+    vector<vector<int>> combinations;
+    set<vector<int>> uniqueCombinations;
+    vector<int> elements;
+    int numElements, targetSum;
+
+    void backtrack(int currentIndex, int remainingSum, vector<int>& currentCombination) {
+        if (remainingSum == 0) {
+            if (uniqueCombinations.find(currentCombination) == uniqueCombinations.end()) {
+                combinations.push_back(currentCombination);
+                uniqueCombinations.insert(currentCombination);
+            }
+            return;
+        }
+
+        for (int i = currentIndex; i < numElements; i++) {
+            if (remainingSum >= elements[i]) {
+                currentCombination.push_back(elements[i]);
+                backtrack(i + 1, remainingSum - elements[i], currentCombination);
+                currentCombination.pop_back();
+            }
+        }
+    }
+
+    vector<vector<int>> CombinationSum2(vector<int>& nums, int n, int k) {
+        sort(nums.begin(), nums.end());
+        elements = nums;
+        numElements = nums.size();
+        targetSum = k;
+        vector<int> currentCombination;
+        backtrack(0, targetSum, currentCombination);
+        return combinations;
+    }
+};
